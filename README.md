@@ -48,4 +48,28 @@ open nifi.properties file and modify these following parts
 
 ![alt text](images/Nifi.png)
 
+## Overall flow of Nifi
+![alt text](images/Nifi_overall_process.png)
+
+Flow bao gồm 3 Processor chính
+
+`GetFile`: dùng để lấy thông tin của file cần chuyển
+
+`UpdateAttribute`: dùng để update/edit thêm các thuộc tính của FlowFile
+
+`PutBigQueryBatch`: đẩy file lên BigQuery
+
+## Processor detail
+
+Configuration for GetFile processor
+![alt text](images/GetFile_config.png)
+
+Configuration for UpdateAttributes processor
+![alt text](images/UpdateAttributes_config.png)
+
+Configuration for PutBigQueryBatch
+![alt text](images/PutBigQueryBatch.png)
+
+
+
 
