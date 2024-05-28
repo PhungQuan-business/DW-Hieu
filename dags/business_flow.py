@@ -48,47 +48,54 @@ FactTable_sql_query = read_sql_file('/opt/airflow/dags/SQL/fact_table.sql')
 
 # ------------Airflow Operators-------------#
 
-def run_bigquery_query(sql_query, **kwargs):
-    hook = BigQueryHook(gcp_conn_id='google_cloud_bigquery_default')
-    client = hook.get_client()
-
-    job_config = bigquery.QueryJobConfig(
-        use_legacy_sql=False,
-        write_disposition='WRITE_TRUNCATE',
-        create_disposition='CREATE_IF_NEEDED'
-    )
-
-    query_job = client.query(sql_query, job_config=job_config)
-    query_job.result()  # Wait for the job to complete
-
-
-t1 = PythonOperator(
+t1 = BigQueryInsertJobOperator(
     task_id='create_update_dim_customer',
-    python_callable=run_bigquery_query,
-    op_kwargs={'sql_query': DimCustomer_sql_query},
+    configuration={
+        "query": {
+            "query": DimCustomer_sql_query,
+            "useLegacySql": False,
+        }
+    },
+    gcp_conn_id='google_cloud_bigquery_default',
     dag=dag,
 )
 
-t2 = PythonOperator(
+t2 = BigQueryInsertJobOperator(
     task_id='create_update_dim_date',
-    python_callable=run_bigquery_query,
-    op_kwargs={'sql_query': DimDate_sql_query},
+    configuration={
+        "query": {
+            "query": DimDate_sql_query,
+            "useLegacySql": False,
+        }
+    },
+    gcp_conn_id='google_cloud_bigquery_default',
     dag=dag,
 )
 
-t3 = PythonOperator(
+t3 = BigQueryInsertJobOperator(
     task_id='create_update_dim_campaign',
-    python_callable=run_bigquery_query,
-    op_kwargs={'sql_query': DimCampaign_sql_query},
+    configuration={
+        "query": {
+            "query": DimCampaign_sql_query,
+            "useLegacySql": False,
+        }
+    },
+    gcp_conn_id='google_cloud_bigquery_default',
     dag=dag,
 )
 
-t4 = PythonOperator(
+t4 = BigQueryInsertJobOperator(
     task_id='create_update_fact_table',
-    python_callable=run_bigquery_query,
-    op_kwargs={'sql_query': FactTable_sql_query},
+    configuration={
+        "query": {
+            "query": FactTable_sql_query,
+            "useLegacySql": False,
+        }
+    },
+    gcp_conn_id='google_cloud_bigquery_default',
     dag=dag,
 )
+
 
 task_delay = BashOperator(task_id="delay_bash_task",
                           dag=dag,
