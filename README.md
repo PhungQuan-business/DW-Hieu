@@ -70,6 +70,24 @@ Configuration for UpdateAttributes processor
 Configuration for PutBigQueryBatch
 ![alt text](images/PutBigQueryBatch.png)
 
+# Apache Airflow
+
+## Overall workflow
+
+![alt text](images/airflow_workflow.png)
+
+The overall workflow include the first 3 operator responsible for creating Dim tables from the raw data source. After finish created there is a 5s in delay time. Lastly there is an operator responsible for creating Fact table.
+
+## Running Dags
+
+Press run and the process should start right away
+![alt text](images/dags_in_process.png)
+
+if all process turn green means that dags run successfully
+![alt text](images/dag_result.png)
+
+in BigQuery you should see the all created dim and fact table
+![alt text](images/bq_result.png)
 
 
 
